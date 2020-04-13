@@ -8,11 +8,20 @@
 #define Wordsize 35
 typedef char string[Wordsize];
 
+string dictionary[99172];
 
-
-void *dict(void *vargp)
+int dict(char *word)
 {
-	sleep(1);
+	for(int i=0; i<99172; i++)
+	{
+		if(strcmp(dictionary[i],word)==0)
+		{
+			printf("match found");
+			return 1;
+		}	
+	}
+	return 0;
+	/*sleep(1);
 	printf("hello world22\n");
 	pthread_t thread_id;
         printf("before thread222\n");
@@ -20,55 +29,44 @@ void *dict(void *vargp)
         //pthread_join(thread_id, NULL);
         printf("after thread22\n");
 	return NULL;
-
+	*/
 }
 
 int main(int argc, char *argv[])
 {
-	printf("hello world\n");	
-	string dictionary[99172];
-	printf("goodbye world\n");
+		
 	FILE *fp;
-	printf("SALT\n");
-	fp = fopen("/home/TU/tuk93452/repo4/words","r");
+	fp = fopen("/home/TU/tuk93452/repo4/words.txt","r");
 	if(fp == NULL)
 	{
 		perror("Error in opening the file");
 		return(-1);
 	}
-	printf("salmon dinner\n");
-	/*for (int i=0; i <5; i++)
-	{
-		printf("a");
-		fscanf(fp,"%s", dictionary[i]);
-	}*/
 
+	//copy dictionary file to an array
 	char *token;
 	char line[35];
 	const char dlim[2] = " ";
-	int u = 0;
-	while (!feof(fp))
-	 {
-		//printf("hello from the other side");
-		fgets(line, 150, fp);
-		token = strtok(line,dlim);     
-    		//token = strtok(NULL,dlim);
-		//arr[u]=stringToNum(token);
-		dictionary[u] == token;
-		//printf("%d\n", arr[u]);
+	int u = 0, n = 1;
+	//while (!feof(fp))
+	while(n>0)
+	 {	
+		n = fscanf(fp, "%s", dictionary[u]);
 		u++;
 	}
-	
-
-
 	fclose(fp);
-	printf("dictionary 5555 = %s\n",dictionary[5555]);
 	
+	
+	int g = dict("hello's");
+	printf(" match = %d\n", g);
+
+	/*
 	pthread_t thread_id;
 	printf("before thread\n");
 	pthread_create(&thread_id, NULL,dict, NULL);
 	pthread_join(thread_id, NULL);
-	printf("after thread\n"); 
+	printf("after thread\n");
+	*/ 
 	return 0;
 }
 
