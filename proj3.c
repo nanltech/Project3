@@ -10,6 +10,22 @@ typedef char string[Wordsize];
 
 string dictionary[99172];
 
+void* threadSpool( void *arg)
+{
+	pthread_t threads[10];
+	// one thread should be detached for counting purposes
+	for(int i=0; i<10; i++)//create threads
+	{
+		//pthread_create(&threads[i], NULL, dict, "hello");
+	}
+	for(int k=0; k<10; k++)//joins threads
+        {
+                pthread_join(threads[k], NULL);
+        }
+
+	return NULL;
+} 
+
 int dict(char *word)
 {
 	for(int i=0; i<99172; i++)
@@ -21,15 +37,6 @@ int dict(char *word)
 		}	
 	}
 	return 0;
-	/*sleep(1);
-	printf("hello world22\n");
-	pthread_t thread_id;
-        printf("before thread222\n");
-        pthread_create(&thread_id, NULL,dict, NULL);
-        //pthread_join(thread_id, NULL);
-        printf("after thread22\n");
-	return NULL;
-	*/
 }
 
 int main(int argc, char *argv[])
@@ -48,7 +55,7 @@ int main(int argc, char *argv[])
 	char line[35];
 	const char dlim[2] = " ";
 	int u = 0, n = 1;
-	//while (!feof(fp))
+	
 	while(n>0)
 	 {	
 		n = fscanf(fp, "%s", dictionary[u]);
