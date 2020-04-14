@@ -5,6 +5,9 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <string.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+
 #define Wordsize 35
 typedef char string[Wordsize];
 
@@ -16,7 +19,7 @@ void* threadSpool( void *arg)
 	// one thread should be detached for counting purposes
 	for(int i=0; i<10; i++)//create threads
 	{
-		//pthread_create(&threads[i], NULL, dict, "hello");
+		//pthread_create(&threads[i], NULL, dict, "hello");//error with dict function, doesn't think it exists
 	}
 	for(int k=0; k<10; k++)//joins threads
         {
@@ -26,7 +29,7 @@ void* threadSpool( void *arg)
 	return NULL;
 } 
 
-int dict(char *word)
+int dict(char *word)//searchs dictionary for word
 {
 	for(int i=0; i<99172; i++)
 	{
@@ -66,6 +69,42 @@ int main(int argc, char *argv[])
 	
 	int g = dict("hello's");
 	printf(" match = %d\n", g);
+	
+	int portNumber = 8888;
+	int socket_desc, new_socket, c;    
+	struct sockaddr_in server, client;
+	if (socket_desc == -1){ 
+		puts("Error creating socket!");
+		exit(1);
+	}
+
+	// prepare sockaddr_instructure    
+	server.sin_family = AF_INET;
+	server.sin_addr.s_addr = INADDR_ANY;
+	server.sin_port = htons(portNumber);
+	int bind_result = bind(socket_desc, (struct sockaddr*)&server, sizeof(server));
+	if (bind_result < 0){
+		puts("Error: failed to Bind.");
+		exit(1);
+	}
+	puts("Bind done.");
+
+	listen(socket_desc, 3);
+	puts("Waiting for incoming connections...");
+	
+	while (1){
+		c = sizeof(struct sockaddr_in);
+		new_socket = accept(socket_desc, (struct sockaddr*)&client, (socklen_t*)&c);
+		if (new_socket < 0){
+		    puts("Error: Accept failed");
+			continue;
+		}
+
+	puts("Connection accepted");
+	//create thread with word passed from socket request
+
+
+
 
 	/*
 	pthread_t thread_id;
